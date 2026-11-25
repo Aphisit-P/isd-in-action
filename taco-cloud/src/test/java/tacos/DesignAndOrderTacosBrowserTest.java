@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -34,6 +35,11 @@ public class DesignAndOrderTacosBrowserTest {
         .implicitlyWait(Duration.ofSeconds(10));
   }
 
+  @BeforeEach
+  public void clearBrowserSession() {
+    browser.manage().deleteAllCookies();
+  }
+
   @AfterAll
   public static void closeBrowser() {
     browser.quit();
@@ -45,8 +51,11 @@ public class DesignAndOrderTacosBrowserTest {
     clickDesignATaco();
     assertDesignPageElements();
     buildAndSubmitATaco("Basic Taco", "FLTO", "GRBF", "CHED", "TMTO", "SLSA");
+    assertCartContains(1);
     clickBuildAnotherTaco();
     buildAndSubmitATaco("Another Taco", "COTO", "CARN", "JACK", "LETC", "SRCR");
+    assertCartContains(2);
+    clickProceedToCheckout();
     fillInAndSubmitOrderForm();
     assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
   }
@@ -57,6 +66,8 @@ public class DesignAndOrderTacosBrowserTest {
     clickDesignATaco();
     assertDesignPageElements();
     buildAndSubmitATaco("Basic Taco", "FLTO", "GRBF", "CHED", "TMTO", "SLSA");
+    assertCartContains(1);
+    clickProceedToCheckout();
     submitEmptyOrderForm();
     fillInAndSubmitOrderForm();
     assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
@@ -68,6 +79,8 @@ public class DesignAndOrderTacosBrowserTest {
     clickDesignATaco();
     assertDesignPageElements();
     buildAndSubmitATaco("Basic Taco", "FLTO", "GRBF", "CHED", "TMTO", "SLSA");
+    assertCartContains(1);
+    clickProceedToCheckout();
     submitInvalidOrderForm();
     fillInAndSubmitOrderForm();
     assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
@@ -129,6 +142,16 @@ public class DesignAndOrderTacosBrowserTest {
     assertIngredient(drinkGroup, 1, "WATR", "Mineral Water");
   }
 
+  private void assertCartContains(int tacoCount) {
+    assertThat(browser.getCurrentUrl()).isEqualTo(cartPageUrl());
+    assertThat(browser.findElements(By.cssSelector("table tbody tr")))
+        .hasSize(tacoCount);
+  }
+
+  private void clickProceedToCheckout() {
+    assertThat(browser.getCurrentUrl()).isEqualTo(cartPageUrl());
+    browser.findElement(By.id("checkout")).click();
+  }
 
   private void fillInAndSubmitOrderForm() {
     assertThat(browser.getCurrentUrl()).startsWith(orderDetailsPageUrl());
@@ -220,8 +243,8 @@ public class DesignAndOrderTacosBrowserTest {
   }
 
   private void clickBuildAnotherTaco() {
-    assertThat(browser.getCurrentUrl()).startsWith(orderDetailsPageUrl());
-    browser.findElement(By.cssSelector("a[id='another']")).click();
+    assertThat(browser.getCurrentUrl()).isEqualTo(cartPageUrl());
+    browser.findElement(By.id("another")).click();
   }
 
 
@@ -230,6 +253,10 @@ public class DesignAndOrderTacosBrowserTest {
   //
   private String designPageUrl() {
     return homePageUrl() + "design";
+  }
+
+  private String cartPageUrl() {
+    return homePageUrl() + "cart";
   }
 
   private String homePageUrl() {
