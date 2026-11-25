@@ -4,12 +4,27 @@ div.ingredient-group:nth-child(odd) {
 }
 
 div.ingredient-group:nth-child(even) {
-    float: left;
+	float: left;
+	padding-left: 20px;
 	padding-right: 0;
 }
 
 div.ingredient-group {
 	width: 50%;
+	padding: 16px;
+	margin-bottom: 20px;
+	background-color: #ffffff; /* พื้นหลังสีเทาอ่อน */
+	border: 1px solid #f1f1f1; /* เส้นกรอบสีเทาเข้ม */
+	border-radius: 8px; /* มุมโค้งเล็กน้อยให้อ่านง่ายขึ้น */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 40%); /* เงาด้านล่าง */
+	background-clip: padding-box; /* ให้พื้นหลังอยู่แค่ในกรอบ ไม่ล้ำออกไปที่ padding-right/left */
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr); /* แบ่ง 2 คอลัมน์เท่าๆ กัน */
+	gap: 20px; /* ช่องไฟทั้งแนวตั้งและแนวนอนระหว่างกล่อง */
+	margin-bottom: 20px;
 }
 
 .grid:after {
@@ -26,4 +41,29 @@ div.ingredient-group {
 
 span.validationError {
 	color: red;
+}
+
+/*logo TacoCloud*/
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.logo-main {
+  position: relative;
+  z-index: 2; /* อยู่ชั้นหน้าสุด ชัดเจน */
+  display: block;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.28)); /* เงาตามรูปทรงโลโก้ */
+}
+
+.logo-blur {
+  position: absolute;
+  top: 25px;   /* ขยับลงล่างเล็กน้อย */
+  left: 20px;  /* ขยับไปทางขวาเล็กน้อย */
+  z-index: 1;  /* ซ้อนอยู่ด้านหลังรูปหลัก */
+  filter: blur(6px); /* ความเบลอ */
+  opacity: 0.8;      /* ความโปร่งใสให้ดูฟุ้งมีมิติ */
+  transform: rotate(8deg) scale(1.03); /* เอียงและขยายเล็กน้อย */
+  pointer-events: none; /* ไม่ให้บังการคลิกเมาส์ */
 }

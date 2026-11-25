@@ -10,13 +10,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT, properties = "server.port=8081")
 public class HomePageBrowserTest {
 
-  @LocalServerPort
-  private int port;
   private static HtmlUnitDriver browser;
 
   @BeforeAll
@@ -34,7 +31,7 @@ public class HomePageBrowserTest {
 
   @Test
   public void testHomePage() {
-    String homePage = "http://localhost:" + port;
+    String homePage = "http://localhost:8081";
     browser.get(homePage);
 
     String titleText = browser.getTitle();
