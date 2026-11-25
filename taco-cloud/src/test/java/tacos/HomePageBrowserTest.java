@@ -38,7 +38,7 @@ public class HomePageBrowserTest {
     Assertions.assertThat(titleText).isEqualTo("Taco Cloud");
 
     String h1Text = browser.findElement(By.tagName("h1")).getText();
-    Assertions.assertThat(h1Text).isEqualTo("Welcome to...");
+    Assertions.assertThat(h1Text).isEqualTo("Welcome to taco cloud eiei");
 
 
     String imgSrc = browser.findElement(By.tagName("img"))
